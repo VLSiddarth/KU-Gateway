@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-with-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: app
+        image: my-app:latest
+        env:
+        - name: OPENAI_BASE_URL
+          value: "http://localhost:8000"
+      - name: ku-gateway
+        image: ku-gateway:latest
+        env:
+        - name: KU_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ku-secrets
+              key: api-key
+        - name: KU_DECAY_THRESHOLD
+          value: "0.5"
+        - name: UPSTREAM_LLM_BASE_URL
+          value: "https://api.openai.com"
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ku-gateway
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000

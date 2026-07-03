@@ -1,0 +1,6 @@
+host: "0.0.0.0"
+port: 8000
+decay_threshold: 0.5
+rate_limit: 100
+redis:
+  enabled: false

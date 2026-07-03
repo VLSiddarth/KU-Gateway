@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  gateway:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - KU_API_KEY=ku_test_1234567890abcdef
+      - KU_API_URL=http://mock-ku-api:8001
+      - KU_DECAY_THRESHOLD=0.5
+      - UPSTREAM_LLM_BASE_URL=http://mock-llm:8080
+    depends_on:
+      - mock-ku-api
+      - mock-llm
+
+  mock-ku-api:
+    build:
+      context: .
+      dockerfile: tests/integration/Dockerfile.mock_ku
+    ports:
+      - "8001:8001"
+
+  mock-llm:
+    image: mendhak/http-https-echo:latest
+    ports:
+      - "8002:8080"

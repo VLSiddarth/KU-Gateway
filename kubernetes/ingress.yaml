@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ku-gateway-ingress
+spec:
+  rules:
+  - host: ku-gateway.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ku-gateway
+            port:
+              number: 8000

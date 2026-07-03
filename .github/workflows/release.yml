@@ -1,0 +1,10 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - ...
