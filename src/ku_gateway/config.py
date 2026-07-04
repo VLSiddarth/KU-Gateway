@@ -56,6 +56,15 @@ class Settings(BaseSettings):
         alias="KU_OPENAI_ENDPOINTS"
     )
 
+    # Upstream LLM provider (not part of KU API)
+    upstream_llm_base_url: str = Field(
+        "https://api.openai.com", alias="UPSTREAM_LLM_BASE_URL"
+    )
+    openai_api_key: Optional[str] = Field(None, alias="OPENAI_API_KEY")
+
+    # KU API query difficulty (1-5)
+    ku_difficulty: int = Field(3, alias="KU_DIFFICULTY", ge=1, le=5)
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 from .config import Settings
-from .proxy import router as proxy_router
+from .proxy import router as proxy_router, telemetry
 from .telemetry import setup_logging
 from .middleware import RateLimitMiddleware, AuthMiddleware
 from .version import __version__
@@ -46,6 +46,11 @@ async def root():
         "status": "running",
         "docs": "/docs",
     }
+
+@app.on_event("startup")
+async def startup_event():
+    if settings.telemetry_enabled:
+        telemetry.print_startup(settings.ku_api_key, settings.decay_threshold, settings.port)
 
 @app.get("/health")
 async def health():

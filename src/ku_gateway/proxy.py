@@ -138,7 +138,7 @@ async def forward_to_llm(
 ):
     """Forward request to LLM provider, preserving only safe headers."""
     # Determine target URL
-    upstream_url = os.getenv("UPSTREAM_LLM_BASE_URL", "")
+    upstream_url = settings.upstream_llm_base_url
     if upstream_url:
         target_url = f"{upstream_url}/v1/chat/completions"
     else:
@@ -160,7 +160,7 @@ async def forward_to_llm(
 
     # If no Authorization header from client, try OPENAI_API_KEY env
     if "authorization" not in (k.lower() for k in forwarded_headers):
-        api_key = os.getenv("OPENAI_API_KEY", "")
+        api_key = settings.openai_api_key
         if api_key:
             forwarded_headers["Authorization"] = f"Bearer {api_key}"
 

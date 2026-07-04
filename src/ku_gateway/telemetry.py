@@ -35,7 +35,7 @@ class Telemetry:
         self.total_conflicts = 0
         self.total_latency = 0.0
     
-    def print_startup(self, api_key: str, threshold: float):
+    def print_startup(self, api_key: str, threshold: float, port: int = 8000):
         """Print startup banner."""
         tier = "enterprise" if api_key.startswith("ku_enterprise_") else "free" if api_key.startswith("ku_test_") else "paid"
         console.print(Panel(
@@ -44,9 +44,9 @@ class Telemetry:
 [bold]✅ Loaded KU_API_KEY:[/bold] {api_key[:8]}... (tier: {tier})
 [bold]⚙️ Decay threshold:[/bold] {threshold}
 [bold]🛡️ Supported sources:[/bold] 14 (arxiv, github, stackoverflow, youtube, kaggle, ...)
-[bold]🌐 Listening on:[/bold] http://localhost:8000
+[bold]🌐 Listening on:[/bold] http://localhost:{port}
 
-[dim]💡 Change your LLM base_url to http://localhost:8000[/dim]""",
+[dim]💡 Change your LLM base_url to http://localhost:{port}[/dim]""",
             title="KU-Gateway",
             border_style="green"
         ))
